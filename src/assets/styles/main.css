@@ -1,0 +1,27 @@
+@import "./variables.css";
+@import "./icon.css";
+
+:root {
+    --sidebar-width: 248px;
+}
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.p-tooltip-text{
+    background-color:#101828 !important;
+    font-size: 13px !important;
+    border-radius: 2px !important;
+    color: #fff;
+    padding: 6px 10px !important;
+    white-space: nowrap !important; 
+    
+}
+.p-tooltip-arrow{
+    border-bottom-color: var(--color-border-focus) !important;
+}
+.p-tooltip{
+    max-width: 100% !important;
+}

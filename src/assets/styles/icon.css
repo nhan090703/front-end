@@ -1,0 +1,290 @@
+.icon24{
+    width: 24px;
+    height: 24px;
+}
+.icon20{
+    width: 20px;
+    height: 20px;
+}
+.icon16{
+    width: 16px;
+    height: 16px;
+}
+.logo-menu{
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: 0px -35px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.logo-item{
+    background-image: url("https://qtsxcdng2.misacdn.net/assets/pas.ic_production_100px-626a0b65.svg?v=12.1.0.3");
+    width: 30px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.icon-drop-down-small{
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -32px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-export {
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.sprite_awh-bc818426.svg?v=12.1.0.3");
+    -webkit-mask-position: -744px -36px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-qtsx {
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -278px -193px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+    transform: scale(1.2);
+    transform-origin: center;
+    width: 20px;
+    height: 20px;
+}
+.icon-reminder {
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -552px -428px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-setting {
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -360px -36px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-notification {
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -24px -36px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-question {
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -48px -36px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-dots-circle {
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -8px -428px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-profile {
+    background-image: url("https://amisplatform.misacdn.net/APIS/PlatformAPI/api/Avatar/77b8feac-dfe5-4b47-b1ff-ac9a2eaced5a/LT0YJBOP.jpg?avatarID=03762a31-c8c5-45ae-887b-17bcdc47043b&width=64&height=64");
+    width: 32px;
+    height: 32px;
+    background-size: contain;
+    border-radius: 9999px;
+}
+.icon-dashboard{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -6px -7px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-order{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -344px -86px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-plan{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -32px -7px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-coordinate{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -57px -7px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-quality-control{
+     -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -110px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-material-factory{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -84px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-plan-cost{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -345px -5px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+
+.icon-outsourcing{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -214px -146px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-production-report{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -214px -7px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-product-material{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -136px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-process{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -162px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-production-capacity{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -189px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+
+.icon-production-category{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -240px -6px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-dropdown{
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -200px -16px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #717680;
+}
+.icon-collapse{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4");
+    -webkit-mask-position: -458px -191px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #9ca3af;
+}
+.icon-plus-white{
+    -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -80px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #fff;
+}
+.icon-reload{
+     -webkit-mask-image: url("https://qtsxcdng2.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.3");
+    -webkit-mask-position: -112px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-first-page{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -143px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-prev-page{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -48px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-next-page{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -64px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-last-page{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -160px -0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-help{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -279px -16px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+    cursor: pointer;
+}
+.icon-close{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -299px -16px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+    cursor: pointer;
+}
+.icon-edit{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -271px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+
+}
+.icon-option{
+    -webkit-mask-image: url("https://qtsxcdng1.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -288px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+
+}
+.icon-copy{
+     -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -224px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #4b5563;
+}
+.icon-delete{
+     -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -208px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color: #f04438;
+}
+.icon-empty{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -176px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #4b5563;
+}
+.icon-active{
+     -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -192px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #4b5563;
+}
+.icon-close-filter{
+      -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -96px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #4b5563;
+}
+.icon-export-r{
+    -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Icon Warehouse-e29a964d.svg?v=12.1.0.4");
+    -webkit-mask-position: -976px 0px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #4b5563;
+}
+.icon-back-arrow{
+     -webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Sprites-a34588bd.svg?v=12.1.0.4");
+    -webkit-mask-position: -589px -430px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #4b5563;
+    cursor: pointer;
+}
+.icon-format{
+-webkit-mask-image: url("https://demoqtsxcdn.misacdn.net/assets/pas.Sprites-a34588bd.svg?v=12.1.0.4");
+    -webkit-mask-position:  -580px -190px;
+    -webkit-mask-repeat: no-repeat;
+    background-color:  #0e9a62;
+    cursor: pointer;
+}

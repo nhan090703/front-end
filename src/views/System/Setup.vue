@@ -1,39 +1,39 @@
-﻿<template>
-    <div class="wrapper">
-        <div class="setup-header">
-            <div class="icon-back-arrow icon20" @click="goBack"></div>
-            <div class="setup-tilte">{{ t('header.setting') }}</div>
-        </div>
-        <div class="setup-content">
-            <div class="setup-item">
-                <div class="setup-item-title">
-                    <div class="icon-format icon24"></div>
-                    <div class="item-title">{{ t('setup.format') }}</div>
-                </div>
-                <div class="setup-item-option setup-item-option--menu" @click.stop="toggleLanguageMenu">
-                    <div class="setup-option-label">{{ t('setup.language') }}</div>
-                    <div class="setup-option-value">
-                        {{ currentLanguageLabel }}
-                        <div class="icon-dropdown icon16"></div>
-                    </div>
-                    <div v-if="languageMenuActive" class="language-menu">
-                        <div
-                            v-for="option in languageOptions"
-                            :key="option.id"
-                            class="language-option"
-                            :class="{ active: locale === option.id }"
-                            @click.stop="changeLanguage(option.id)"
-                        >
-                            {{ option.name }}
-                        </div>
-                    </div>
-                </div>
-                <div class="setup-item-option">
-                    {{ t('setup.numberingRule') }}
-                </div>
-            </div>
-        </div>
+<template>
+  <div class="wrapper">
+    <div class="setup-header">
+      <div class="icon-back-arrow icon20" @click="goBack"></div>
+      <div class="setup-tilte">{{ t('header.setting') }}</div>
     </div>
+    <div class="setup-content">
+      <div class="setup-item">
+        <div class="setup-item-title">
+          <div class="icon-format icon24"></div>
+          <div class="item-title">{{ t('setup.format') }}</div>
+        </div>
+        <div class="setup-item-option setup-item-option--menu" @click.stop="toggleLanguageMenu">
+          <div class="setup-option-label">{{ t('setup.language') }}</div>
+          <div class="setup-option-value">
+            {{ currentLanguageLabel }}
+            <div class="icon-dropdown icon16"></div>
+          </div>
+          <div v-if="languageMenuActive" class="language-menu">
+            <div
+              v-for="option in languageOptions"
+              :key="option.id"
+              class="language-option"
+              :class="{ active: locale === option.id }"
+              @click.stop="changeLanguage(option.id)"
+            >
+              {{ option.name }}
+            </div>
+          </div>
+        </div>
+        <div class="setup-item-option setup-item-option--link" @click="openDocumentCodeRule">
+          {{ t('setup.numberingRule') }}
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -45,56 +45,63 @@ const router = useRouter()
 const { t, locale } = useI18n()
 const languageMenuActive = ref(false)
 const languageOptions = [
-    { id: 'vi', name: 'Tiếng Việt' },
-    { id: 'en', name: 'English' },
+  { id: 'vi', name: 'Tiếng Việt' },
+  { id: 'en', name: 'English' },
 ]
 
 /**
  * nptnhan (5/6/2026) hàm tính current language label
  */
 const currentLanguageLabel = computed(() => {
-    return languageOptions.find((option) => option.id === locale.value)?.name || languageOptions[0].name
+  return languageOptions.find((option) => option.id === locale.value)?.name || languageOptions[0].name
 })
 
 /**
  * nptnhan (5/6/2026) hàm go back
  */
 const goBack = () => {
-    router.back()
+  router.back()
+}
+
+/**
+ * nptnhan (8/6/2026) hàm mở màn hình quy tắc đánh số chứng từ
+ */
+const openDocumentCodeRule = () => {
+  router.push('/system/document-code-rules')
 }
 
 /**
  * nptnhan (5/6/2026) hàm toggle language menu
  */
 const toggleLanguageMenu = () => {
-    languageMenuActive.value = !languageMenuActive.value
+  languageMenuActive.value = !languageMenuActive.value
 }
 
 /**
  * nptnhan (5/6/2026) hàm change language
  */
 const changeLanguage = (language) => {
-    locale.value = language
-    localStorage.setItem('misa-locale', language)
-    languageMenuActive.value = false
+  locale.value = language
+  localStorage.setItem('misa-locale', language)
+  languageMenuActive.value = false
 }
 
 /**
  * nptnhan (5/6/2026) hàm close language menu
  */
 const closeLanguageMenu = () => {
-    languageMenuActive.value = false
+  languageMenuActive.value = false
 }
 
 /**
  * nptnhan (5/6/2026) hàm xử lý khi component được khởi tạo
  */
 onMounted(() => {
-    document.addEventListener('click', closeLanguageMenu)
+  document.addEventListener('click', closeLanguageMenu)
 })
 
 onBeforeUnmount(() => {
-    document.removeEventListener('click', closeLanguageMenu)
+  document.removeEventListener('click', closeLanguageMenu)
 })
 </script>
 
@@ -159,12 +166,19 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
 }
+.setup-item-option--link,
+.setup-item-option--menu {
+    cursor: pointer;
+    border-radius: 6px;
+}
+.setup-item-option--link:hover {
+    background-color: #f3f4f6;
+    color: #0e9a62;
+}
 .setup-item-option--menu {
     position: relative;
     justify-content: space-between;
     padding-right: 8px;
-    cursor: pointer;
-    border-radius: 6px;
 }
 .setup-item-option--menu:hover {
     background-color: #f3f4f6;

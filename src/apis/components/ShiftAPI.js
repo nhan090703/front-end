@@ -31,6 +31,10 @@ class ShiftAPI {
     return api.post('/shifts', entity)
   }
 
+  static async generateCode() {
+    return api.get('/shifts/generate-code')
+  }
+
   /**
    * nptnhan (5/6/2026) hàm update active
    */

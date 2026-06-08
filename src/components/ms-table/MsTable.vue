@@ -59,6 +59,7 @@
           :key="rowIndex"
           :class="['table-row', { 'selected-row': isRowSelected(row) }]"
           tabindex="0"
+          @click="handleRowClick(row)"
           @dblclick="handleEdit(row)"
         >
           <td class="col__check__box">
@@ -79,13 +80,13 @@
             @mousemove="moveCellTooltip"
             @mouseleave="hideCellTooltip"
           >
-            <template v-if="row[field.key] === null || row[field.key] === undefined">
-              <span style="color: #1e2633; font-size: 14px">-</span>
-            </template>
-            <template v-else-if="field.type === 'custom'">
+            <template v-if="field.type === 'custom'">
               <slot :name="field.key" :row="row" :field="field" :value="row[field.key]">
                 {{ handleFormat(row[field.key], 'text') }}
               </slot>
+            </template>
+            <template v-else-if="row[field.key] === null || row[field.key] === undefined">
+              <span style="color: #1e2633; font-size: 14px">-</span>
             </template>
             <template v-else>
               <span class="cell-label">{{ getCellDisplay(row, field) }}</span>
@@ -415,6 +416,7 @@ const emit = defineEmits([
   'toggle-active',
   'filter',
   'clear-filter',
+  'row-click',
 ])
 
 /**
@@ -444,6 +446,13 @@ const isRowSelected = (row) => {
  */
 const handleEdit = (row) => {
   emit('edit', row)
+}
+
+/**
+ * nptnhan (8/6/2026) hàm handle row click
+ */
+const handleRowClick = (row) => {
+  emit('row-click', row)
 }
 
 /**

@@ -173,6 +173,7 @@ const initialShiftSnapshot = ref('')
 const firstErrorField = ref('')
 const modalContentRef = ref(null)
 const isDragging = ref(false)
+const generateCodeRequestId = ref(0)
 const dragPosition = reactive({
   left: null,
   top: null,
@@ -327,6 +328,42 @@ const resetForm = (data = null) => {
 }
 
 /**
+ * nptnhan (8/6/2026) hàm sinh mã ca khi thêm mới/nhân bản
+ */
+const generateShiftCode = async () => {
+  if (isEditMode.value || String(shift.shiftCode || '').trim()) return
+
+  const requestId = generateCodeRequestId.value + 1
+  generateCodeRequestId.value = requestId
+
+  try {
+    const response = await ShiftAPI.generateCode()
+    const generatedCode = response?.data?.data
+    if (
+      requestId === generateCodeRequestId.value &&
+      props.isActive &&
+      !isEditMode.value &&
+      generatedCode &&
+      !String(shift.shiftCode || '').trim()
+    ) {
+      shift.shiftCode = generatedCode
+      errors.shiftCode = ''
+      updateInitialShiftSnapshot()
+    }
+  } catch (error) {
+    console.error('Generate shift code error', error)
+  }
+}
+
+/**
+ * nptnhan (8/6/2026) hàm khởi tạo form popup
+ */
+const initForm = async (data = null) => {
+  resetForm(data)
+  await generateShiftCode()
+}
+
+/**
  * nptnhan (5/6/2026) hàm focus first input
  */
 const focusFirstInput = async () => {
@@ -352,7 +389,7 @@ watch(
   (value) => {
     if (value[0]) {
       resetDragPosition()
-      resetForm(value[1])
+      initForm(value[1])
       focusFirstInput()
     }
   },
@@ -743,13 +780,13 @@ const save = async () => {
  */
 const saveAndAdd = async () => {
   if (isEditMode.value && !hasFormChanged()) {
-    resetForm()
+    await initForm()
     return
   }
   if (!validate()) return
   const savedMode = isEditMode.value ? 'edit-and-add' : 'add'
   if (await saveShift(savedMode)) {
-    resetForm()
+    await initForm()
   }
 }
 

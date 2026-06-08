@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import ShiftIndex from '@/views/ProductionCategory/Shift/ShiftIndex.vue'
 import Category from '@/views/ProductionCategory/Category.vue'
 import Setup from '@/views/System/Setup.vue'
+import DocumentCodeRule from '@/views/System/DocumentCodeRule.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,6 +90,12 @@ const router = createRouter({
       path: '/system/setup',
       name: 'setup',
       component: Setup,
+      meta: { hideSidebar: true },
+    },
+    {
+      path: '/system/document-code-rules',
+      name: 'document-code-rules',
+      component: DocumentCodeRule,
       meta: { hideSidebar: true },
     },
   ],

@@ -5,6 +5,10 @@ class DocumentCodeRuleAPI {
     return api.get('/DocumentCodeRules/all')
   }
 
+  static async getPaged(request) {
+    return api.post('/DocumentCodeRules/paged', request)
+  }
+
   static async update(entity) {
     return api.put('/DocumentCodeRules', entity)
   }

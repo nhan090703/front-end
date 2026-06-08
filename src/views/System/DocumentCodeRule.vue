@@ -93,19 +93,34 @@
                     Chưa có quy tắc đánh số chứng từ
                 </div>
             </div>
+            <MsFooterPaging
+                v-model:page-size="pageSize"
+                :page="page"
+                :total-record="totalRecord"
+                @page-change="handlePageChange"
+            />
         </div>
     </div>
+    <MsDialog
+        :isActive="validateDialogActive"
+        :title="t('common.warning')"
+        @close="closeValidateDialog"
+    >
+        {{ validateDialogMessage }}
+    </MsDialog>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import MsButton from '@/components/ms-button/MsButton.vue'
 import MsInput from '@/components/ms-input/MsInput.vue'
 import MsSearchBox from '@/components/ms-search-box/MsSearchBox.vue'
 import MsTable from '@/components/ms-table/MsTable.vue'
+import MsFooterPaging from '@/components/ms-footer-paging/MsFooterPaging.vue'
+import MsDialog from '@/components/ms-dialog/MsDialog.vue'
 import DocumentCodeRuleAPI from '@/apis/components/DocumentCodeRuleAPI.js'
 
 const router = useRouter()
@@ -116,8 +131,13 @@ const loading = ref(false)
 const saving = ref(false)
 const loadError = ref('')
 const searchText = ref('')
+const page = ref(1)
+const pageSize = ref(10)
+const totalRecord = ref(0)
 const isEditMode = ref(false)
 const editingRuleKey = ref('')
+const validateDialogActive = ref(false)
+const validateDialogMessage = ref('')
 
 const fields = computed(() => [
   {
@@ -158,23 +178,8 @@ const fields = computed(() => [
 ])
 
 const filteredRows = computed(() => {
-  const keyword = searchText.value.trim().toLowerCase()
-  const source = keyword
-    ? rows.value.filter((row) =>
-        [
-          row.documentTypeVi,
-          row.tableName,
-          row.prefix,
-          row.currentNumber,
-          row.numberLength,
-          row.suffix,
-          row.displayCode,
-        ].some((value) => String(value ?? '').toLowerCase().includes(keyword)),
-      )
-    : rows.value
-
-  return source.map((row, index) => {
-    row.rowIndex = index + 1
+  return rows.value.map((row, index) => {
+    row.rowIndex = (page.value - 1) * pageSize.value + index + 1
     return row
   })
 })
@@ -199,9 +204,25 @@ const loadDocumentCodeRules = async () => {
   loadError.value = ''
 
   try {
-    const response = await DocumentCodeRuleAPI.getAll()
-    const data = response?.data?.data || []
+    const startTime = Date.now()
+    const request = {
+      pageIndex: page.value,
+      pageSize: pageSize.value,
+      search: searchText.value,
+      filters: [],
+      isExport: false,
+    }
+    const response = await DocumentCodeRuleAPI.getPaged(request)
+
+    const elapsed = Date.now() - startTime
+    const minLoadingTime = 2000
+    if (elapsed < minLoadingTime) {
+      await new Promise((resolve) => setTimeout(resolve, minLoadingTime - elapsed))
+    }
+
+    const data = response?.data?.data?.data || []
     rows.value = data.map(normalizeDocumentCodeRule)
+    totalRecord.value = response?.data?.data?.total || 0
     selectedKeys.value = []
   } catch (error) {
     loadError.value = 'Không tải được quy tắc đánh số chứng từ'
@@ -211,8 +232,10 @@ const loadDocumentCodeRules = async () => {
   }
 }
 
-const onSearch = (keyword) => {
+const onSearch = async (keyword) => {
   searchText.value = keyword
+  page.value = 1
+  await loadDocumentCodeRules()
 }
 
 const editRules = () => {
@@ -229,6 +252,13 @@ const cancelEdit = async () => {
 const saveRules = async () => {
   const editingRule = rows.value.find((row) => getRuleKey(row) === editingRuleKey.value)
   if (!editingRule) return
+
+  const validationMessage = validateRuleCodeLength(editingRule)
+  if (validationMessage) {
+    validateDialogMessage.value = validationMessage
+    validateDialogActive.value = true
+    return
+  }
 
   saving.value = true
   loadError.value = ''
@@ -258,6 +288,35 @@ const saveRules = async () => {
     saving.value = false
   }
 }
+
+const buildPreviewCode = (rule) => {
+  const prefix = String(rule.prefix || '')
+  const suffix = String(rule.suffix || '')
+  const currentNumber = String(Number(rule.currentNumber) || 0)
+  const numberLength = Number(rule.numberLength) || 0
+  return `${prefix}${currentNumber.padStart(numberLength, '0')}${suffix}`
+}
+
+const validateRuleCodeLength = (rule) => {
+  const previewCode = buildPreviewCode(rule)
+  if (previewCode.length <= 20) return ''
+
+  return `Mã hiển thị "${previewCode}" đang có ${previewCode.length} ký tự, vượt quá tối đa 20 ký tự. Vui lòng giảm tiền tố, hậu tố hoặc tổng số ký tự phần số.`
+}
+
+const closeValidateDialog = () => {
+  validateDialogActive.value = false
+}
+
+const handlePageChange = async (newPage) => {
+  page.value = newPage
+  await loadDocumentCodeRules()
+}
+
+watch(pageSize, async () => {
+  page.value = 1
+  await loadDocumentCodeRules()
+})
 
 const getRuleKey = (row) => row?.ruleId || row?.tableName
 

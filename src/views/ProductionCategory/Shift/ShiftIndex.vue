@@ -107,59 +107,12 @@
               </template>
             </MsTable>
           </div>
-          <div class="body-list-footer">
-            <div class="total-count">
-              <div>{{ t('common.total') }}&nbsp;</div>
-              <strong>{{ totalRecord }}</strong>
-            </div>
-            <div class="pagination">
-              <div class="page-size-title">{{ t('common.rowsPerPage') }}</div>
-              <div class="page-size-component">
-                <MsSelectBox v-model="pageSize" :options="pageSizeOptions"></MsSelectBox>
-              </div>
-              <div class="page-info">
-                <strong>{{ startRecord }} - {{ endRecord }}</strong>
-              </div>
-              <div class="action-btn">
-                <div class="first-page-btn">
-                  <MsButton
-                    @click="goFirstPage"
-                    :class="{ disabled: page === 1 }"
-                    class="normal-status"
-                  >
-                    <div class="icon-first-page icon16"></div>
-                  </MsButton>
-                </div>
-                <div class="prev-page-btn">
-                  <MsButton
-                    @click="goPrevPage"
-                    :class="{ disabled: page === 1 }"
-                    class="normal-status"
-                  >
-                    <div class="icon-prev-page icon16"></div>
-                  </MsButton>
-                </div>
-                <div class="next-page-btn">
-                  <MsButton
-                    @click="goNextPage"
-                    :class="{ disabled: page === totalPages }"
-                    class="normal-status"
-                  >
-                    <div class="icon-next-page icon16"></div>
-                  </MsButton>
-                </div>
-                <div class="last-page-btn">
-                  <MsButton
-                    @click="goLastPage"
-                    :class="{ disabled: page === totalPages }"
-                    class="normal-status"
-                  >
-                    <div class="icon-last-page icon16"></div>
-                  </MsButton>
-                </div>
-              </div>
-            </div>
-          </div>
+          <MsFooterPaging
+            v-model:page-size="pageSize"
+            :page="page"
+            :total-record="totalRecord"
+            @page-change="handlePageChange"
+          />
         </div>
       </div>
     </div>
@@ -202,14 +155,14 @@
       </i18n-t>
     </div>
   </MsDialog>
-  <MsToast v-if="toastActive" @close="toastActive = false">{{ toastMessage }}</MsToast>
+  <MsToast v-if="toastActive" :type="toastType" @close="toastActive = false">{{ toastMessage }}</MsToast>
 </template>
 <script setup>
 import MsButton from '@/components/ms-button/MsButton.vue'
 import MsSearchBox from '@/components/ms-search-box/MsSearchBox.vue'
 import { label } from '@primeuix/themes/aura/metergroup'
 import MsTable from '@/components/ms-table/MsTable.vue'
-import MsSelectBox from '@/components/ms-select-box/MsSelectBox.vue'
+import MsFooterPaging from '@/components/ms-footer-paging/MsFooterPaging.vue'
 import MsDialog from '@/components/ms-dialog/MsDialog.vue'
 import MsToast from '@/components/ms-toast/MsToast.vue'
 
@@ -392,7 +345,7 @@ const searchQuery = ref('')
 const columnFilters = ref({})
 const filterResetKey = ref('')
 const filterResetVersion = ref(0)
-const { toastActive, toastMessage, showToast } = useToast()
+const { toastActive, toastMessage, toastType, showToast } = useToast()
 
 /**
  * nptnhan (6/6/2026) hàm chuẩn hóa dữ liệu ca làm việc từ API
@@ -714,27 +667,6 @@ const pageSize = ref(10)
 const totalRecord = ref(0)
 
 /**
- * nptnhan (5/6/2026) hàm total pages
- */
-const totalPages = computed(() => {
-  return totalRecord.value === 0 ? 1 : Math.ceil(totalRecord.value / pageSize.value)
-})
-
-/**
- * nptnhan (5/6/2026) hàm start record
- */
-const startRecord = computed(() => {
-  return totalRecord.value === 0 ? 0 : (page.value - 1) * pageSize.value + 1
-})
-
-/**
- * nptnhan (5/6/2026) hàm end record
- */
-const endRecord = computed(() => {
-  return Math.min(page.value * pageSize.value, totalRecord.value)
-})
-
-/**
  * nptnhan (7/6/2026) hàm format giờ trước khi gửi filter API
  */
 const formatTime = (value) => {
@@ -880,7 +812,7 @@ const exportExcel = async () => {
     console.error('Export excel error:', err)
     console.error('Error response:', err.response?.data)
     console.error('Error status:', err.response?.status)
-    showToast(t('shift.messages.exportError'))
+    showToast(t('shift.messages.exportError'), 3000, 'error')
   } finally {
     exporting.value = false
   }
@@ -918,49 +850,18 @@ async function loadData() {
     console.error('API error:', err)
     console.error('Error response:', err.response?.data)
     console.error('Error status:', err.response?.status)
-    showToast(t('shift.messages.loadError'))
+    showToast(t('shift.messages.loadError'), 3000, 'error')
   } finally {
     loading.value = false
   }
 }
 
 /**
- * nptnhan (5/6/2026) hàm go to page
+ * nptnhan (8/6/2026) hàm handle page change
  */
-const goToPage = async (newPage) => {
-  if (newPage < 1 || newPage > totalPages.value) {
-    return
-  }
+const handlePageChange = async (newPage) => {
   page.value = newPage
   await loadData()
-}
-
-/**
- * nptnhan (5/6/2026) hàm go first page
- */
-const goFirstPage = async () => {
-  await goToPage(1)
-}
-
-/**
- * nptnhan (5/6/2026) hàm go prev page
- */
-const goPrevPage = async () => {
-  await goToPage(page.value - 1)
-}
-
-/**
- * nptnhan (5/6/2026) hàm go next page
- */
-const goNextPage = async () => {
-  await goToPage(page.value + 1)
-}
-
-/**
- * nptnhan (5/6/2026) hàm go last page
- */
-const goLastPage = async () => {
-  await goToPage(totalPages.value)
 }
 
 /**
@@ -995,14 +896,6 @@ onMounted(async () => {
   await loadData()
 })
 
-//Số dòng/trang
-const pageSizeOptions = [
-  { id: 5, name: '5' },
-  { id: 10, name: '10' },
-  { id: 20, name: '20' },
-  { id: 50, name: '50' },
-  { id: 100, name: '100' },
-]
 </script>
 <style scoped>
 .main-view {
@@ -1191,62 +1084,6 @@ const pageSizeOptions = [
 }
 :deep(.col__modifieddate) {
   width: 160px;
-}
-.body-list-footer {
-  height: 48px;
-  border-top: solid 1px #d5d7da;
-  display: flex;
-  align-items: center;
-  padding: 8px 16px;
-  justify-content: space-between;
-}
-.total-count {
-  display: flex;
-  font-size: 13px;
-}
-.pagination {
-  display: flex;
-  font-size: 13px;
-  gap: 16px;
-  align-items: center;
-  min-width: 350px;
-}
-.action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.first-page-btn,
-.prev-page-btn,
-.next-page-btn,
-.last-page-btn {
-  margin: 2px;
-}
-.page-size-component {
-  width: 80px;
-}
-.disabled {
-  cursor: not-allowed;
-  background-color: #fff;
-}
-.disabled {
-  cursor: not-allowed;
-  background-color: #fff;
-}
-.disabled:hover {
-  cursor: not-allowed;
-  background-color: #f3f4f6;
-  opacity: 0.5;
-}
-.disabled div {
-  cursor: not-allowed;
-  background-color: #d5d7da;
-}
-.normal-status {
-  background-color: #fff;
-}
-.normal-status:hover {
-  background-color: #f3f4f6;
 }
 .feature-batch {
   display: flex;

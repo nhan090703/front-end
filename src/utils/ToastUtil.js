@@ -6,13 +6,15 @@
 export function useToast() {
   const toastActive = ref(false)
   const toastMessage = ref('')
+  const toastType = ref('success')
   let toastTimeout = null
 
   /**
    * nptnhan (5/6/2026) hàm show toast
    */
-  const showToast = (message, duration = 3000) => {
+  const showToast = (message, duration = 3000, type = 'success') => {
     toastMessage.value = message
+    toastType.value = type
     toastActive.value = true
 
     if (toastTimeout) {
@@ -28,6 +30,7 @@ export function useToast() {
   return {
     toastActive,
     toastMessage,
+    toastType,
     showToast,
   }
 }

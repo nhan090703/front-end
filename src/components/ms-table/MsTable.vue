@@ -34,7 +34,7 @@
         <!-- Shimmer Loading Rows -->
         <tr
           v-if="props.loading"
-          v-for="i in Math.min(5, props.pageSize || 10)"
+          v-for="i in props.pageSize || 10"
           :key="`shimmer-${i}`"
           class="shimmer-row"
         >

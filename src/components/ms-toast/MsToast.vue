@@ -1,6 +1,6 @@
 <template>
   <div class="ms-toast-wrapper">
-    <div class="ms-toast">
+    <div class="ms-toast" :class="`ms-toast--${type}`">
       <div class="icon-toast"></div>
       <div class="toast-text">
         <slot></slot>
@@ -10,6 +10,13 @@
   </div>
 </template>
 <script setup>
+defineProps({
+  type: {
+    type: String,
+    default: 'success',
+    validator: (value) => ['success', 'error'].includes(value),
+  },
+})
 const emit = defineEmits(['close'])
 </script>
 <style scoped>
@@ -40,6 +47,12 @@ const emit = defineEmits(['close'])
   background-color: #12b76a;
   pointer-events: all;
   margin-top: 0;
+}
+.ms-toast--error {
+  background-color: #f04438;
+}
+.ms-toast--success {
+  background-color: #12b76a;
 }
 .toast-text {
   flex: 1;

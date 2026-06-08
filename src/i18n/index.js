@@ -47,6 +47,22 @@ const messages = {
       language: 'Tùy chỉnh ngôn ngữ',
       numberingRule: 'Quy tắc đánh số chứng từ',
     },
+    documentCodeRule: {
+      validation: {
+        prefixRequired: 'Tiền tố không được để trống.',
+        currentNumberInvalid: 'Giá trị phần số phải là số nguyên lớn hơn hoặc bằng 0.',
+        numberLengthInvalid: 'Tổng số ký tự phần số phải là số nguyên lớn hơn hoặc bằng 1.',
+        numberLengthTooShort:
+          'Tổng số ký tự phần số phải lớn hơn hoặc bằng số ký tự trong giá trị phần số.',
+        displayCodeMaxLength:
+          'Mã hiển thị "{code}" đang có {length} ký tự, vượt quá tối đa {max} ký tự. Vui lòng giảm tiền tố, hậu tố hoặc tổng số ký tự phần số.',
+      },
+      messages: {
+        saveError: 'Không lưu được quy tắc đánh số chứng từ',
+        invalidGeneratedCode:
+          'Mã tiếp theo của {documentType} được sinh từ quy tắc đánh số chứng từ không hợp lệ, vui lòng xem lại quy tắc đánh số chứng từ.',
+      },
+    },
     sidebar: {
       dashboard: 'Tổng quan',
       orders: 'Đơn đặt hàng',
@@ -122,6 +138,8 @@ const messages = {
         duplicateInline: 'Ca làm việc <{code}> đã tồn tại. Vui lòng kiểm tra lại',
         duplicateDialog: 'Ca làm việc <{code}> đã tồn tại.',
         saveError: 'Có lỗi xảy ra khi lưu ca làm việc.',
+        invalidGeneratedCode:
+          'Mã ca được sinh từ quy tắc đánh số chứng từ không hợp lệ, vui lòng tự nhập 1 mã ca hoặc xem lại quy tắc đánh số chứng từ.',
         exitTitle: 'Thoát và không lưu',
         exitConfirm: 'Nếu bạn thoát các dữ liệu đang nhập liệu sẽ không được lưu lại.',
         deleteSingle: 'Ca làm việc {code} sau khi bị xóa sẽ không thể khôi phục. Bạn có muốn tiếp tục xóa không ?',
@@ -192,6 +210,22 @@ const messages = {
       format: 'Format',
       language: 'Language customization',
       numberingRule: 'Document numbering rule',
+    },
+    documentCodeRule: {
+      validation: {
+        prefixRequired: 'Prefix is required.',
+        currentNumberInvalid: 'Current number must be an integer greater than or equal to 0.',
+        numberLengthInvalid: 'Number length must be an integer greater than or equal to 1.',
+        numberLengthTooShort:
+          'Number length must be greater than or equal to the number of digits in the current number.',
+        displayCodeMaxLength:
+          'Display code "{code}" has {length} characters, exceeding the maximum of {max} characters. Please reduce the prefix, suffix, or number length.',
+      },
+      messages: {
+        saveError: 'Could not save the document numbering rule',
+        invalidGeneratedCode:
+          'The next code for {documentType} generated from the document numbering rule is invalid. Please review the document numbering rule.',
+      },
     },
     sidebar: {
       dashboard: 'Dashboard',
@@ -268,6 +302,8 @@ const messages = {
         duplicateInline: 'Shift <{code}> already exists. Please check again',
         duplicateDialog: 'Shift <{code}> already exists.',
         saveError: 'An error occurred while saving the shift.',
+        invalidGeneratedCode:
+          'The shift code generated from the document numbering rule is invalid. Please enter a shift code manually or review the document numbering rule.',
         exitTitle: 'Exit without saving',
         exitConfirm: 'If you exit, the entered data will not be saved.',
         deleteSingle: 'Shift {code} cannot be restored after deletion. Do you want to continue?',

@@ -60,7 +60,7 @@ const currentLanguageLabel = computed(() => {
  * nptnhan (5/6/2026) hàm go back
  */
 const goBack = () => {
-  router.back()
+  router.push({ name: 'shifts' })
 }
 
 /**

@@ -5,122 +5,127 @@
         <div class="icon-back-arrow icon20" @click="goBack"></div>
         <div class="document-rule-title">{{ t('setup.numberingRule') }}</div>
       </div>
-     
     </div>
     <div class="document-rule-content">
-        <div class=content-container>
-            <div class="document-rule-toolbar">
-                <div class="ms-search-box">
-                    <MsSearchBox @search="onSearch"></MsSearchBox>
-                </div>
-                <div class="action-btn">
-                    <template v-if="isEditMode">
-                        <MsButton class="cancel-rule-btn" @click="cancelEdit" :disabled="loading || saving">
-                            <div class="btn-text">Hủy</div>
-                        </MsButton>
-                        <MsButton class="save-rule-btn" @click="saveRules" :disabled="loading || saving || !editingRuleKey">
-                            <div class="btn-text">Lưu</div>
-                        </MsButton>
-                    </template>
-                    <MsButton v-else class="edit-rule-btn" @click="editRules" :disabled="loading">
-                        <div class="btn-text">Sửa</div>
-                    </MsButton>
-                </div>
-            </div>
-
-            <div class="document-rule-table">
-            <MsTable
-                :fields="fields"
-                :rows="filteredRows"
-                :selected-keys="selectedKeys"
-                row-key="ruleId"
-                :loading="loading"
-                :page-size="10"
-                @select="onSelectRow"
-                @select-all="onSelectAll"
-                @clear-selection="clearSelection"
-                @row-click="onRowClick"
-            >
-                <template #rowIndex="{ row }">
-                <span>{{ row.rowIndex }}</span>
-                </template>
-                <template #prefix="{ row, value }">
-                <MsInput
-                    v-if="isEditingRow(row)"
-                    class="inline-rule-input"
-                    v-model="row.prefix"
-                    :maxlength="20"
-                    @click.stop
-                ></MsInput>
-                <span v-else>{{ value }}</span>
-                </template>
-                <template #currentNumber="{ row, value }">
-                <MsInput
-                    v-if="isEditingRow(row)"
-                    class="inline-rule-input inline-rule-input--number"
-                    :model-value="String(row.currentNumber ?? '')"
-                    @update:modelValue="(value) => updateNumberField(row, 'currentNumber', value)"
-                    @click.stop
-                ></MsInput>
-                <span v-else>{{ value }}</span>
-                </template>
-                <template #numberLength="{ row, value }">
-                <MsInput
-                    v-if="isEditingRow(row)"
-                    class="inline-rule-input inline-rule-input--number"
-                    :model-value="String(row.numberLength ?? '')"
-                    @update:modelValue="(value) => updateNumberField(row, 'numberLength', value)"
-                    @click.stop
-                ></MsInput>
-                <span v-else>{{ value }}</span>
-                </template>
-                <template #suffix="{ row, value }">
-                <MsInput
-                    v-if="isEditingRow(row)"
-                    class="inline-rule-input"
-                    v-model="row.suffix"
-                    :maxlength="20"
-                    @click.stop
-                ></MsInput>
-                <span v-else>{{ value }}</span>
-                </template>
-                <template #displayCode="{ value }">
-                <span>{{ value }}</span>
-                </template>
-            </MsTable>
-            <div v-if="!loading && loadError" class="table-state">{{ loadError }}</div>
-                <div v-else-if="!loading && !filteredRows.length" class="table-state">
-                    Chưa có quy tắc đánh số chứng từ
-                </div>
-            </div>
-            <MsFooterPaging
-                v-model:page-size="pageSize"
-                :page="page"
-                :total-record="totalRecord"
-                @page-change="handlePageChange"
-            />
+      <div class="content-container">
+        <div class="document-rule-toolbar">
+          <div class="ms-search-box">
+            <MsSearchBox @search="onSearch"></MsSearchBox>
+          </div>
+          <div class="action-btn">
+            <template v-if="isEditMode">
+              <MsButton class="cancel-rule-btn" @click="cancelEdit" :disabled="loading">
+                <div class="btn-text">Hủy</div>
+              </MsButton>
+              <MsButton class="save-rule-btn" @click="saveRules" :disabled="loading">
+                <div class="btn-text">Lưu</div>
+              </MsButton>
+            </template>
+            <MsButton v-else class="edit-rule-btn" @click="editRules" :disabled="loading">
+              <div class="btn-text">Sửa</div>
+            </MsButton>
+          </div>
         </div>
+
+        <div class="document-rule-table">
+          <MsTable
+            :fields="fields"
+            :rows="filteredRows"
+            :selected-keys="selectedKeys"
+            row-key="ruleId"
+            :loading="loading"
+            :page-size="pageSize"
+            @select="onSelectRow"
+            @select-all="onSelectAll"
+            @clear-selection="clearSelection"
+            @row-click="onRowClick"
+          >
+            <template #rowIndex="{ row }">
+              <span>{{ row.rowIndex }}</span>
+            </template>
+            <template #prefix="{ row, value }">
+              <MsInput
+                v-if="isEditingRow(row)"
+                class="inline-rule-input"
+                :model-value="row.prefix"
+                :error="errors.prefix"
+                :maxlength="20"
+                @update:modelValue="(value) => updateTextField(row, 'prefix', value)"
+                @click.stop
+              ></MsInput>
+              <span v-else>{{ value }}</span>
+            </template>
+            <template #currentNumber="{ row, value }">
+              <MsInput
+                v-if="isEditingRow(row)"
+                class="inline-rule-input inline-rule-input--number"
+                :model-value="String(row.currentNumber ?? '')"
+                :error="errors.currentNumber"
+                @update:modelValue="(value) => updateNumberField(row, 'currentNumber', value)"
+                @click.stop
+              ></MsInput>
+              <span v-else>{{ value }}</span>
+            </template>
+            <template #numberLength="{ row, value }">
+              <MsInput
+                v-if="isEditingRow(row)"
+                class="inline-rule-input inline-rule-input--number"
+                :model-value="String(row.numberLength ?? '')"
+                :error="errors.numberLength"
+                @update:modelValue="(value) => updateNumberField(row, 'numberLength', value)"
+                @click.stop
+              ></MsInput>
+              <span v-else>{{ value }}</span>
+            </template>
+            <template #suffix="{ row, value }">
+              <MsInput
+                v-if="isEditingRow(row)"
+                class="inline-rule-input"
+                :model-value="row.suffix"
+                :error="errors.suffix"
+                :maxlength="20"
+                @update:modelValue="(value) => updateTextField(row, 'suffix', value)"
+                @click.stop
+              ></MsInput>
+              <span v-else>{{ value }}</span>
+            </template>
+            <template #displayCode="{ value }">
+              <span>{{ value }}</span>
+            </template>
+          </MsTable>
+          <div v-if="!loading && loadError" class="table-state">{{ loadError }}</div>
+          <div v-else-if="!loading && !filteredRows.length" class="table-state">
+            Chưa có quy tắc đánh số chứng từ
+          </div>
+        </div>
+        <MsFooterPaging
+          v-model:page-size="pageSize"
+          :page="page"
+          :total-record="totalRecord"
+          @page-change="handlePageChange"
+        />
+      </div>
     </div>
     <MsDialog
-        :isActive="validateDialogActive"
-        :title="t('common.warning')"
-        @close="closeValidateDialog"
+      :isActive="validateDialogActive"
+      :title="t('common.warning')"
+      @close="closeValidateDialog"
     >
-        {{ validateDialogMessage }}
+      {{ validateDialogMessage }}
     </MsDialog>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import MsButton from '@/components/ms-button/MsButton.vue'
 import MsInput from '@/components/ms-input/MsInput.vue'
 import MsSearchBox from '@/components/ms-search-box/MsSearchBox.vue'
 import MsTable from '@/components/ms-table/MsTable.vue'
-import MsFooterPaging from '@/components/ms-footer-paging/MsFooterPaging.vue'
 import MsDialog from '@/components/ms-dialog/MsDialog.vue'
+import MsFooterPaging from '@/components/ms-footer-paging/MsFooterPaging.vue'
 import DocumentCodeRuleAPI from '@/apis/components/DocumentCodeRuleAPI.js'
 
 const router = useRouter()
@@ -128,7 +133,6 @@ const { t } = useI18n()
 const rows = ref([])
 const selectedKeys = ref([])
 const loading = ref(false)
-const saving = ref(false)
 const loadError = ref('')
 const searchText = ref('')
 const page = ref(1)
@@ -136,8 +140,15 @@ const pageSize = ref(10)
 const totalRecord = ref(0)
 const isEditMode = ref(false)
 const editingRuleKey = ref('')
+const originalEditingRule = ref(null)
 const validateDialogActive = ref(false)
 const validateDialogMessage = ref('')
+const errors = reactive({
+  prefix: '',
+  currentNumber: '',
+  numberLength: '',
+  suffix: '',
+})
 
 const fields = computed(() => [
   {
@@ -224,6 +235,8 @@ const loadDocumentCodeRules = async () => {
     rows.value = data.map(normalizeDocumentCodeRule)
     totalRecord.value = response?.data?.data?.total || 0
     selectedKeys.value = []
+    clearErrors()
+    showPagedRulesWarning()
   } catch (error) {
     loadError.value = 'Không tải được quy tắc đánh số chứng từ'
     console.error('Load document code rules error', error)
@@ -239,69 +252,122 @@ const onSearch = async (keyword) => {
 }
 
 const editRules = () => {
-  isEditMode.value = true
-  editingRuleKey.value = ''
+  isEditMode.value = !isEditMode.value
+  if (!isEditMode.value) {
+    editingRuleKey.value = ''
+    originalEditingRule.value = null
+    clearErrors()
+  }
 }
 
 const cancelEdit = async () => {
   isEditMode.value = false
   editingRuleKey.value = ''
+  originalEditingRule.value = null
+  clearErrors()
   await loadDocumentCodeRules()
 }
 
-const saveRules = async () => {
-  const editingRule = rows.value.find((row) => getRuleKey(row) === editingRuleKey.value)
-  if (!editingRule) return
-
-  const validationMessage = validateRuleCodeLength(editingRule)
-  if (validationMessage) {
-    validateDialogMessage.value = validationMessage
-    validateDialogActive.value = true
-    return
-  }
-
-  saving.value = true
-  loadError.value = ''
-
-  try {
-    const payload = {
-      ...editingRule,
-      currentNumber: Number(editingRule.currentNumber) || 0,
-      numberLength: Number(editingRule.numberLength) || 0,
-      suffix: editingRule.suffix || null,
-      modifiedBy: 'admin',
-    }
-
-    const response = await DocumentCodeRuleAPI.update(payload)
-    if (response?.data?.isSuccess === true) {
-      isEditMode.value = false
-      editingRuleKey.value = ''
-      await loadDocumentCodeRules()
-      return
-    }
-
-    loadError.value = response?.data?.userMessage || 'Không lưu được quy tắc đánh số chứng từ'
-  } catch (error) {
-    loadError.value = error?.response?.data?.userMessage || 'Không lưu được quy tắc đánh số chứng từ'
-    console.error('Save document code rule error', error)
-  } finally {
-    saving.value = false
-  }
-}
-
-const buildPreviewCode = (rule) => {
+const buildNextGeneratedCode = (rule) => {
   const prefix = String(rule.prefix || '')
   const suffix = String(rule.suffix || '')
-  const currentNumber = String(Number(rule.currentNumber) || 0)
-  const numberLength = Number(rule.numberLength) || 0
-  return `${prefix}${currentNumber.padStart(numberLength, '0')}${suffix}`
+  const nextNumber = Number(rule.currentNumber) + 1
+  const nextNumberText = String(nextNumber)
+  const numberLength = Math.max(Number(rule.numberLength) || 0, nextNumberText.length)
+  return `${prefix}${nextNumberText.padStart(numberLength, '0')}${suffix}`
 }
 
-const validateRuleCodeLength = (rule) => {
-  const previewCode = buildPreviewCode(rule)
-  if (previewCode.length <= 20) return ''
+const getInvalidGeneratedCodeMessage = (rule) => {
+  const nextCode = buildNextGeneratedCode(rule)
+  if (nextCode.length <= 20) return ''
 
-  return `Mã hiển thị "${previewCode}" đang có ${previewCode.length} ký tự, vượt quá tối đa 20 ký tự. Vui lòng giảm tiền tố, hậu tố hoặc tổng số ký tự phần số.`
+  return t('documentCodeRule.messages.invalidGeneratedCode', {
+    documentType: rule.documentTypeVi,
+    code: nextCode,
+    length: nextCode.length,
+    max: 20,
+  })
+}
+
+const showPagedRulesWarning = () => {
+  if (isEditMode.value) return
+
+  const invalidRule = rows.value.find((row) => getInvalidGeneratedCodeMessage(row))
+  if (!invalidRule) return
+
+  isEditMode.value = true
+  editingRuleKey.value = getRuleKey(invalidRule)
+  originalEditingRule.value = getEditableRuleSnapshot(invalidRule)
+  validateRule(invalidRule)
+}
+
+const getCurrentNumberLength = (rule) => {
+  return String(Number(rule.currentNumber) || 0).length
+}
+
+const showValidateDialog = (message) => {
+  validateDialogMessage.value = message
+  validateDialogActive.value = true
+}
+
+const clearErrors = () => {
+  Object.keys(errors).forEach((key) => {
+    errors[key] = ''
+  })
+}
+
+const setFieldError = (field, message) => {
+  errors[field] = message
+}
+
+const validateRule = (rule) => {
+  clearErrors()
+
+  const prefix = String(rule.prefix || '').trim()
+  const currentNumber = Number(rule.currentNumber)
+  const numberLength = Number(rule.numberLength)
+  const currentNumberLength = getCurrentNumberLength(rule)
+  const isCurrentNumberValid = Number.isInteger(currentNumber) && currentNumber >= 0
+  const isNumberLengthValid = Number.isInteger(numberLength) && numberLength >= 1
+
+  if (!prefix) {
+    setFieldError('prefix', t('documentCodeRule.validation.prefixRequired'))
+  }
+
+  if (!isCurrentNumberValid) {
+    setFieldError('currentNumber', t('documentCodeRule.validation.currentNumberInvalid'))
+  }
+
+  if (!isNumberLengthValid) {
+    setFieldError('numberLength', t('documentCodeRule.validation.numberLengthInvalid'))
+  }
+
+  if (isCurrentNumberValid && isNumberLengthValid && numberLength < currentNumberLength) {
+    setFieldError(
+      'numberLength',
+      t('documentCodeRule.validation.numberLengthTooShort', {
+        numberLength,
+        currentNumberLength,
+      }),
+    )
+  }
+
+  const invalidGeneratedCodeMessage =
+    isCurrentNumberValid && isNumberLengthValid ? getInvalidGeneratedCodeMessage(rule) : ''
+  if (invalidGeneratedCodeMessage) {
+    const message = invalidGeneratedCodeMessage
+    errors.prefix = errors.prefix || message
+    errors.numberLength = errors.numberLength || message
+    errors.suffix = errors.suffix || message
+  }
+
+  const firstError = Object.values(errors).find(Boolean)
+  if (firstError) {
+    showValidateDialog(firstError)
+    return false
+  }
+
+  return true
 }
 
 const closeValidateDialog = () => {
@@ -318,7 +384,72 @@ watch(pageSize, async () => {
   await loadDocumentCodeRules()
 })
 
+const saveRules = async () => {
+  const editingRule = rows.value.find((row) => getRuleKey(row) === editingRuleKey.value)
+  if (!editingRule) {
+    isEditMode.value = false
+    editingRuleKey.value = ''
+    originalEditingRule.value = null
+    clearErrors()
+    return
+  }
+
+  if (!hasRuleChanged(editingRule)) {
+    isEditMode.value = false
+    editingRuleKey.value = ''
+    originalEditingRule.value = null
+    clearErrors()
+    return
+  }
+
+  if (!validateRule(editingRule)) return
+
+  loading.value = true
+  loadError.value = ''
+
+  try {
+    const payload = {
+      ...editingRule,
+      currentNumber: Number(editingRule.currentNumber) || 0,
+      numberLength: Number(editingRule.numberLength) || 0,
+      suffix: editingRule.suffix || null,
+      modifiedBy: 'admin',
+    }
+
+    const response = await DocumentCodeRuleAPI.update(payload)
+    if (response?.data?.isSuccess === true) {
+      isEditMode.value = false
+      editingRuleKey.value = ''
+      originalEditingRule.value = null
+      clearErrors()
+      await loadDocumentCodeRules()
+      return
+    }
+
+    loadError.value = response?.data?.userMessage || t('documentCodeRule.messages.saveError')
+  } catch (error) {
+    loadError.value = error?.response?.data?.userMessage || t('documentCodeRule.messages.saveError')
+    console.error('Save document code rule error', error)
+  } finally {
+    loading.value = false
+  }
+}
+
 const getRuleKey = (row) => row?.ruleId || row?.tableName
+
+const getEditableRuleSnapshot = (row) => ({
+  prefix: row?.prefix || '',
+  currentNumber: Number(row?.currentNumber) || 0,
+  numberLength: Number(row?.numberLength) || 0,
+  suffix: row?.suffix || '',
+})
+
+const hasRuleChanged = (row) => {
+  if (!originalEditingRule.value) return true
+
+  const currentRule = getEditableRuleSnapshot(row)
+  return Object.keys(currentRule).some((key) => currentRule[key] !== originalEditingRule.value[key])
+}
 
 const isEditingRow = (row) => {
   return isEditMode.value && editingRuleKey.value && getRuleKey(row) === editingRuleKey.value
@@ -327,11 +458,28 @@ const isEditingRow = (row) => {
 const onRowClick = (row) => {
   if (!isEditMode.value) return
   editingRuleKey.value = getRuleKey(row)
+  originalEditingRule.value = getEditableRuleSnapshot(row)
+  clearErrors()
+}
+
+const clearRuleError = (field) => {
+  errors[field] = ''
+  if (field === 'prefix' || field === 'numberLength' || field === 'suffix') {
+    errors.prefix = ''
+    errors.numberLength = ''
+    errors.suffix = ''
+  }
+}
+
+const updateTextField = (row, field, value) => {
+  row[field] = value
+  clearRuleError(field)
 }
 
 const updateNumberField = (row, field, value) => {
   const normalizedValue = String(value ?? '').replace(/[^\d]/g, '')
   row[field] = normalizedValue === '' ? 0 : Number(normalizedValue)
+  clearRuleError(field)
 }
 
 const onSelectRow = (row, checked) => {
@@ -371,17 +519,16 @@ onMounted(() => {
 }
 
 .document-rule-header {
-  height: 88px;
-  padding: 28px 14px 14px;
+  height: 56px;
+  padding: 0 16px;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 }
 
 .document-rule-title {
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 700;
+  font-size: 20px;
+  font-weight: 600;
   color: #101828;
 }
 
@@ -392,51 +539,32 @@ onMounted(() => {
 }
 
 .edit-rule-btn {
-    border: 1px solid #e5e7eb;
-    color: #0e9a62;
-    background-color: #fff;
+  border: 1px solid #e5e7eb;
+  color: #0e9a62;
+  background-color: #fff;
 }
 
 .edit-rule-btn:hover {
-      background-color: #cdeadf;
+  background-color: #cdeadf;
 }
-
-.cancel-rule-btn {
-    border: 1px solid #d1d5db;
-    color: #374151;
-    background-color: #fff;
+.document-rule-content {
+  background-color: #e5e7eb;
+  padding: 12px;
+  flex: 1;
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
-
-.cancel-rule-btn:hover {
-    background-color: #f3f4f6;
-}
-
-.save-rule-btn {
-    border: 1px solid #0e9a62;
-    color: #fff;
-    background-color: #0e9a62;
-}
-
-.save-rule-btn:hover {
-    background-color: #087f50;
-}
-.document-rule-content{
-    background-color: #e5e7eb;
-    padding: 12px;
-    flex: 1;
-    display: flex;
-    min-height: 0;
-    overflow: hidden;
-}
-.content-container{
-    background-color: #fff;
-    border-radius: 12px;
-    flex: 1;
-    min-width: 0;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+.content-container {
+  background-color: #fff;
+  border-radius: 12px;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .document-rule-toolbar {
@@ -445,6 +573,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 }
 
 .document-rule-table {
@@ -638,8 +767,23 @@ onMounted(() => {
 ::v-deep(.document-rule-table .col__displaycode) {
   min-width: 260px;
 }
-.action-btn{
-    display: flex;
-    gap: 8px;
+.action-btn {
+  display: flex;
+  gap: 8px;
+}
+.save-rule-btn{
+  background-color: #0e9a62;
+  color: #fff;
+}
+.save-rule-btn:hover{
+  background-color: #0a724b;
+}
+.cancel-rule-btn{
+  background-color: #fff;
+  color: #101828;
+  border: 1px solid #D5D7DA;
+}
+.cancel-rule-btn:hover{
+  background-color: #f3f4f6;
 }
 </style>

@@ -60,6 +60,8 @@ const handleIconClick = (item) => {
     router.push({ name: 'setup' })
   }
 }
+
+
 </script>
 <style scoped>
 .header {

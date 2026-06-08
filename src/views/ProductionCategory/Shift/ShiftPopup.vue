@@ -338,6 +338,12 @@ const generateShiftCode = async () => {
 
   try {
     const response = await ShiftAPI.generateCode()
+    if (response?.data?.isSuccess === false) {
+      dialogMessage.value = t('shift.messages.invalidGeneratedCode')
+      dialogActive.value = true
+      return
+    }
+
     const generatedCode = response?.data?.data
     if (
       requestId === generateCodeRequestId.value &&
@@ -351,6 +357,10 @@ const generateShiftCode = async () => {
       updateInitialShiftSnapshot()
     }
   } catch (error) {
+    if (requestId === generateCodeRequestId.value && props.isActive && !isEditMode.value) {
+      dialogMessage.value = t('shift.messages.invalidGeneratedCode')
+      dialogActive.value = true
+    }
     console.error('Generate shift code error', error)
   }
 }

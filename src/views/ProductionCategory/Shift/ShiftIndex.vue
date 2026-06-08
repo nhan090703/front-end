@@ -155,6 +155,13 @@
       </i18n-t>
     </div>
   </MsDialog>
+  <MsDialog
+    :isActive="deleteWarningDialogActive"
+    :title="t('common.warning')"
+    @close="closeDeleteWarningDialog"
+  >
+    {{ deleteWarningMessage }}
+  </MsDialog>
   <MsToast v-if="toastActive" :type="toastType" @close="toastActive = false">{{ toastMessage }}</MsToast>
 </template>
 <script setup>
@@ -220,6 +227,11 @@ const closePopup = () => {
  * nptnhan (5/6/2026) hàm handle saved
  */
 const handleSaved = async (mode, savedShift = null) => {
+  if (mode === 'reload') {
+    await loadData()
+    return
+  }
+
   if (mode === 'edit-and-add') {
     editingShift.value = null
   }
@@ -339,6 +351,8 @@ const selectedKeys = ref([])
 const deleteDialogActive = ref(false)
 const deleteMode = ref('single')
 const selectedRow = ref(null)
+const deleteWarningDialogActive = ref(false)
+const deleteWarningMessage = ref('')
 const loading = ref(false)
 const exporting = ref(false)
 const searchQuery = ref('')
@@ -528,13 +542,15 @@ const batchActivate = async () => {
 
   try {
     const res = await ShiftAPI.updateActive(ids, true)
-    if (res?.data?.isSuccess || res?.status === 200) {
+    if (res?.data?.isSuccess === true) {
       await loadData()
       clearSelection()
     } else {
+      showDeleteWarningDialog(res?.data?.userMessage)
       console.error('Batch activate failed', res)
     }
   } catch (err) {
+    showDeleteWarningDialog(err?.response?.data?.userMessage)
     console.error('API batch activate error', err)
   }
 }
@@ -549,13 +565,15 @@ const batchDeactivate = async () => {
 
   try {
     const res = await ShiftAPI.updateActive(ids, false)
-    if (res?.data?.isSuccess || res?.status === 200) {
+    if (res?.data?.isSuccess === true) {
       await loadData()
       clearSelection()
     } else {
+      showDeleteWarningDialog(res?.data?.userMessage)
       console.error('Batch deactivate failed', res)
     }
   } catch (err) {
+    showDeleteWarningDialog(err?.response?.data?.userMessage)
     console.error('API batch deactivate error', err)
   }
 }
@@ -576,12 +594,14 @@ const toggleRowActive = async (row) => {
     const newInActive = !row.inActive
     const res = await ShiftAPI.updateActive([id], newInActive)
 
-    if (res?.data?.isSuccess || res?.status === 200) {
+    if (res?.data?.isSuccess === true) {
       await loadData()
     } else {
+      showDeleteWarningDialog(res?.data?.userMessage)
       console.error(t('shift.messages.updateStatusFailed'), res)
     }
   } catch (err) {
+    showDeleteWarningDialog(err?.response?.data?.userMessage)
     console.error('API updateActive error', err)
   }
 }
@@ -593,6 +613,18 @@ const cancelDelete = () => {
   selectedRow.value = null
   deleteMode.value = 'single'
   deleteDialogActive.value = false
+}
+
+const showDeleteWarningDialog = (message) => {
+  const isStaleDelete = String(message || '').includes('không tồn tại hoặc đã bị xóa')
+  deleteWarningMessage.value = isStaleDelete || !message ? t('shift.messages.deleteStale') : message
+  deleteWarningDialogActive.value = true
+}
+
+const closeDeleteWarningDialog = async () => {
+  deleteWarningDialogActive.value = false
+  deleteWarningMessage.value = ''
+  await loadData()
 }
 
 /**
@@ -617,13 +649,14 @@ const confirmDelete = async () => {
 
     const res = await ShiftAPI.delete(id)
 
-    if (res?.data?.isSuccess || res?.status === 200) {
+    if (res?.data?.isSuccess === true) {
       await loadData()
       showToast(t('shift.messages.deleteSuccess'))
     } else {
-      console.error('Delete failed', res)
+      showDeleteWarningDialog(res?.data?.userMessage)
     }
   } catch (err) {
+    showDeleteWarningDialog(err?.response?.data?.userMessage)
     console.error('API delete error', err)
   } finally {
     selectedRow.value = null
@@ -645,14 +678,16 @@ const confirmBatchDelete = async () => {
   try {
     const res = await ShiftAPI.deleteMany(ids)
 
-    if (res?.data?.isSuccess || res?.status === 200) {
+    if (res?.data?.isSuccess === true) {
       await loadData()
       clearSelection()
       showToast(t('shift.messages.batchDeleteSuccess', { count: ids.length }))
     } else {
+      showDeleteWarningDialog(res?.data?.userMessage)
       console.error('Batch delete failed', res)
     }
   } catch (err) {
+    showDeleteWarningDialog(err?.response?.data?.userMessage)
     console.error('API batch delete error', err)
   } finally {
     selectedRow.value = null

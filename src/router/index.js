@@ -3,6 +3,7 @@ import ShiftIndex from '@/views/ProductionCategory/Shift/ShiftIndex.vue'
 import Category from '@/views/ProductionCategory/Category.vue'
 import Setup from '@/views/System/Setup.vue'
 import DocumentCodeRule from '@/views/System/DocumentCodeRule.vue'
+import ChangeLog from '@/views/System/ChangeLog.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -96,6 +97,12 @@ const router = createRouter({
       path: '/system/document-code-rules',
       name: 'document-code-rules',
       component: DocumentCodeRule,
+      meta: { hideSidebar: true },
+    },
+    {
+      path: '/system/change-logs',
+      name: 'change-logs',
+      component: ChangeLog,
       meta: { hideSidebar: true },
     },
   ],

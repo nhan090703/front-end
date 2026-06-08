@@ -169,6 +169,7 @@ const dialogActive = ref(false)
 const dialogMessage = ref('')
 const duplicateShiftCode = ref('')
 const exitConfirmActive = ref(false)
+const hasConcurrencyError = ref(false)
 const initialShiftSnapshot = ref('')
 const firstErrorField = ref('')
 const modalContentRef = ref(null)
@@ -525,6 +526,12 @@ const focusField = async (fieldName) => {
  */
 const closeErrorDialog = () => {
   dialogActive.value = false
+  if (hasConcurrencyError.value) {
+    hasConcurrencyError.value = false
+    emit('saved', 'reload')
+    emit('close')
+    return
+  }
   focusField(firstErrorField.value)
 }
 
@@ -713,7 +720,27 @@ const validate = () => {
 /**
  * nptnhan (5/6/2026) hàm show save error
  */
+const isConcurrencyError = (message = '') => {
+  const normalizedMessage = String(message)
+  return (
+    normalizedMessage.includes('Dữ liệu đã bị thay đổi') ||
+    normalizedMessage.includes('không tồn tại hoặc đã bị xóa')
+  )
+}
+
 const showSaveError = (responseData) => {
+  const userMessage = responseData?.userMessage || ''
+
+  if (isConcurrencyError(userMessage)) {
+    console.warn('Cảnh báo dữ liệu đã thay đổi ở tab khác:', responseData)
+    duplicateShiftCode.value = ''
+    firstErrorField.value = ''
+    hasConcurrencyError.value = true
+    dialogMessage.value = t('shift.messages.concurrencyError')
+    dialogActive.value = true
+    return
+  }
+
   if (responseData?.userMessage === 'DuplicateCode') {
     duplicateShiftCode.value = String(shift.shiftCode || '').trim()
     errors.shiftCode = t('shift.messages.duplicateInline', { code: duplicateShiftCode.value })
@@ -722,7 +749,7 @@ const showSaveError = (responseData) => {
   } else {
     duplicateShiftCode.value = ''
     firstErrorField.value = ''
-    dialogMessage.value = responseData?.userMessage || t('shift.messages.saveError')
+    dialogMessage.value = userMessage || t('shift.messages.saveError')
   }
 
   dialogActive.value = true
@@ -775,10 +802,6 @@ const saveShift = async (savedMode = null) => {
  * nptnhan (5/6/2026) hàm save
  */
 const save = async () => {
-  if (isEditMode.value && !hasFormChanged()) {
-    forceClosePopup()
-    return
-  }
   if (!validate()) return
   if (await saveShift()) {
     forceClosePopup()
@@ -789,10 +812,6 @@ const save = async () => {
  * nptnhan (5/6/2026) hàm save and add
  */
 const saveAndAdd = async () => {
-  if (isEditMode.value && !hasFormChanged()) {
-    await initForm()
-    return
-  }
   if (!validate()) return
   const savedMode = isEditMode.value ? 'edit-and-add' : 'add'
   if (await saveShift(savedMode)) {

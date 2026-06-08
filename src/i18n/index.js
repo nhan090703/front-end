@@ -46,6 +46,7 @@ const messages = {
       format: 'Định dạng',
       language: 'Tùy chỉnh ngôn ngữ',
       numberingRule: 'Quy tắc đánh số chứng từ',
+      accessLog: 'Nhật ký truy cập',
     },
     documentCodeRule: {
       validation: {
@@ -140,6 +141,8 @@ const messages = {
         saveError: 'Có lỗi xảy ra khi lưu ca làm việc.',
         invalidGeneratedCode:
           'Mã ca được sinh từ quy tắc đánh số chứng từ không hợp lệ, vui lòng tự nhập 1 mã ca hoặc xem lại quy tắc đánh số chứng từ.',
+        concurrencyError: 'Dữ liệu đã bị thay đổi bởi người khác. Vui lòng tải lại dữ liệu.',
+        deleteStale: 'Ca làm việc không còn tồn tại hoặc đã bị xóa.',
         exitTitle: 'Thoát và không lưu',
         exitConfirm: 'Nếu bạn thoát các dữ liệu đang nhập liệu sẽ không được lưu lại.',
         deleteSingle: 'Ca làm việc {code} sau khi bị xóa sẽ không thể khôi phục. Bạn có muốn tiếp tục xóa không ?',
@@ -210,6 +213,7 @@ const messages = {
       format: 'Format',
       language: 'Language customization',
       numberingRule: 'Document numbering rule',
+      accessLog: 'Access log',
     },
     documentCodeRule: {
       validation: {
@@ -304,6 +308,8 @@ const messages = {
         saveError: 'An error occurred while saving the shift.',
         invalidGeneratedCode:
           'The shift code generated from the document numbering rule is invalid. Please enter a shift code manually or review the document numbering rule.',
+        concurrencyError: 'Data has been changed by another user. Please reload the data.',
+        deleteStale: 'The shift does not exist or has already been deleted. Please reload the data.',
         exitTitle: 'Exit without saving',
         exitConfirm: 'If you exit, the entered data will not be saved.',
         deleteSingle: 'Shift {code} cannot be restored after deletion. Do you want to continue?',

@@ -31,6 +31,9 @@
         <div class="setup-item-option setup-item-option--link" @click="openDocumentCodeRule">
           {{ t('setup.numberingRule') }}
         </div>
+        <div class="setup-item-option setup-item-option--link" @click="openChangeLog">
+          {{ t('setup.accessLog') }}
+        </div>
       </div>
     </div>
   </div>
@@ -68,6 +71,10 @@ const goBack = () => {
  */
 const openDocumentCodeRule = () => {
   router.push('/system/document-code-rules')
+}
+
+const openChangeLog = () => {
+  router.push('/system/change-logs')
 }
 
 /**

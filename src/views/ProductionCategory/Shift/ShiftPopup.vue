@@ -422,13 +422,68 @@ watch(
   },
 )
 
+const clearErrorWhenHasValue = (field, value, requiredMessages) => {
+  if (!value || !requiredMessages.includes(errors[field])) return
+  errors[field] = ''
+}
+
+/**
+ * nptnhan (9/6/2026) hàm xóa lỗi bắt buộc khi người dùng nhập dữ liệu
+ */
+watch(
+  () => shift.shiftCode,
+  (value) => {
+    clearErrorWhenHasValue('shiftCode', String(value || '').trim(), [
+      t('shift.validation.shiftCodeRequired'),
+    ])
+  },
+)
+
+/**
+ * nptnhan (9/6/2026) hàm xóa lỗi bắt buộc khi người dùng nhập dữ liệu
+ */
+watch(
+  () => shift.shiftName,
+  (value) => {
+    clearErrorWhenHasValue('shiftName', String(value || '').trim(), [
+      t('shift.validation.shiftNameRequired'),
+    ])
+  },
+)
+
+/**
+ * nptnhan (9/6/2026) hàm xóa lỗi bắt buộc khi người dùng nhập dữ liệu
+ */
+watch(
+  () => shift.beginShiftTime,
+  (value) => {
+    clearErrorWhenHasValue('beginShiftTime', value, [
+      t('shift.validation.beginShiftTimeRequired'),
+    ])
+  },
+)
+
+/**
+ * nptnhan (9/6/2026) hàm xóa lỗi bắt buộc khi người dùng nhập dữ liệu
+ */
+watch(
+  () => shift.endShiftTime,
+  (value) => {
+    clearErrorWhenHasValue('endShiftTime', value, [
+      t('shift.validation.endShiftTimeRequired'),
+    ])
+  },
+)
+
 /**
  * nptnhan (5/6/2026) hàm xóa lỗi thời gian khi người dùng thay đổi giá trị
  */
 watch(
   () => shift.beginBreakTime,
-  () => {
-    errors.beginBreakTime = ''
+  (value) => {
+    clearErrorWhenHasValue('beginBreakTime', value, [
+      t('shift.validation.missingBeginBreak'),
+    ])
   },
 )
 
@@ -437,8 +492,10 @@ watch(
  */
 watch(
   () => shift.endBreakTime,
-  () => {
-    errors.endBreakTime = ''
+  (value) => {
+    clearErrorWhenHasValue('endBreakTime', value, [
+      t('shift.validation.missingEndBreak'),
+    ])
   },
 )
 /**

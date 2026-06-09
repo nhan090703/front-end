@@ -1,7 +1,8 @@
 <template>
   <div class="ms-toast-wrapper">
     <div class="ms-toast" :class="`ms-toast--${type}`">
-      <div class="icon-toast"></div>
+      <template v-if="type=='success'"><div class="icon-toast"></div></template>
+      <template v-else ><div class="icon-danger"></div></template>
       <div class="toast-text">
         <slot></slot>
       </div>
@@ -77,5 +78,14 @@ const emit = defineEmits(['close'])
   margin-right: 16px;
   cursor: pointer;
   background-color: #fff;
+}
+.icon-danger{
+  -webkit-mask-image: url('https://demoqtsxcdn.misacdn.net/assets/pas.qtsx_icon-d81b89bb.svg?v=12.1.0.4');
+  -webkit-mask-position: -249px -168px;
+  -webkit-mask-repeat: no-repeat;
+  background-color: #fff;
+  width: 20px;
+  height: 20px;
+  margin: 1px 8px 0 16px;
 }
 </style>

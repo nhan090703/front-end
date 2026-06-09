@@ -18,8 +18,7 @@
 </template>
 
 <script setup>
-import { label } from '@primeuix/themes/aura/metergroup'
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const props = defineProps({
@@ -42,17 +41,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'blur'])
 const internalValue = ref(props.modelValue ?? '')
-const errorMessage = ref('')
-
-/**
- * nptnhan (5/6/2026) hàm theo dõi thay đổi lỗi từ component cha
- */
-watch(
-  () => props.error,
-  (val) => {
-    errorMessage.value = val || ''
-  },
-)
+const localErrorMessage = ref('')
+const errorMessage = computed(() => props.error || localErrorMessage.value)
 
 /**
  * nptnhan (5/6/2026) hàm theo dõi thay đổi dữ liệu
@@ -61,8 +51,8 @@ watch(
   () => props.modelValue,
   (value) => {
     internalValue.value = value ?? ''
-    if (value && errorMessage.value) {
-      errorMessage.value = ''
+    if (value && localErrorMessage.value) {
+      localErrorMessage.value = ''
     }
   },
 )
@@ -71,8 +61,8 @@ watch(
  * nptnhan (5/6/2026) hàm theo dõi thay đổi dữ liệu
  */
 watch(internalValue, (value) => {
-  if (errorMessage.value && value.trim()) {
-    errorMessage.value = ''
+  if (localErrorMessage.value && value.trim()) {
+    localErrorMessage.value = ''
   }
   emit('update:modelValue', value)
 })
@@ -82,9 +72,9 @@ watch(internalValue, (value) => {
  */
 function onBlur() {
   if (props.required && !internalValue.value.trim()) {
-    errorMessage.value = t('component.required', { label: props.label })
+    localErrorMessage.value = t('component.required', { label: props.label })
   } else {
-    errorMessage.value = ''
+    localErrorMessage.value = ''
   }
   emit('blur')
 }

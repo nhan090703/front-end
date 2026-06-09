@@ -62,6 +62,7 @@ const showDropdown = ref(false)
 const wrapperRef = ref(null)
 const timeItemRefs = ref([])
 const highlightedIndex = ref(-1)
+const localErrorMessage = ref('')
 /**
  * nptnhan (5/6/2026) hàm normalize time
  */
@@ -71,22 +72,13 @@ const normalizeTime = (value) => {
 }
 
 const internalValue = ref(normalizeTime(props.modelValue))
-const errorMessage = ref('')
-/**
- * nptnhan (5/6/2026) hàm theo dõi thay đổi lỗi từ component cha
- */
-watch(
-  () => props.error,
-  (val) => {
-    errorMessage.value = val || ''
-  },
-)
+const errorMessage = computed(() => props.error || localErrorMessage.value)
 /**
  * nptnhan (5/6/2026) hàm on input
  */
 function onInput(e) {
-  if (errorMessage.value && e.target.value.trim()) {
-    errorMessage.value = ''
+  if (localErrorMessage.value && e.target.value.trim()) {
+    localErrorMessage.value = ''
   }
 
   const raw = e.target.value || ''
@@ -124,9 +116,9 @@ function onInput(e) {
  */
 function onBlur() {
   if (props.required && !internalValue.value) {
-    errorMessage.value = t('component.required', { label: props.label })
+    localErrorMessage.value = t('component.required', { label: props.label })
   } else {
-    errorMessage.value = ''
+    localErrorMessage.value = ''
   }
   emit('blur')
 }
@@ -176,8 +168,8 @@ watch(
   () => props.modelValue,
   (v) => {
     internalValue.value = normalizeTime(v)
-    if (v && errorMessage.value) {
-      errorMessage.value = ''
+    if (v && localErrorMessage.value) {
+      localErrorMessage.value = ''
     }
   },
 )
@@ -187,8 +179,8 @@ watch(
  */
 watch(internalValue, (v) => {
   emit('update:modelValue', v)
-  if (errorMessage.value && v) {
-    errorMessage.value = ''
+  if (localErrorMessage.value && v) {
+    localErrorMessage.value = ''
   }
 })
 

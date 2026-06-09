@@ -179,6 +179,7 @@ import ShiftPopup from './ShiftPopup.vue'
 import ShiftAPI from '@/apis/components/ShiftAPI.js'
 import { useToast } from '@/utils/ToastUtil.js'
 import { Shift } from '@/models/Shift.js'
+import { formatNumber } from '@/utils/formatter.js'
 
 const { t } = useI18n()
 
@@ -455,6 +456,10 @@ const formatFilterValue = (filter) => {
     return String(filter.value || '').slice(0, 5)
   }
 
+  if (filter.field?.typeFilter?.type === 'number') {
+    return formatNumber(filter.value)
+  }
+
   return filter.value
 }
 
@@ -717,7 +722,8 @@ const formatTime = (value) => {
  */
 const normalizeFilterValue = (filter) => {
   if (filter.field?.typeFilter?.type === 'number') {
-    const value = Number(filter.value)
+    const normalizedValue = String(filter.value).trim().replace(/\./g, '').replace(',', '.')
+    const value = Number(normalizedValue)
     return Number.isNaN(value) ? null : value
   }
 
@@ -1149,13 +1155,14 @@ onMounted(async () => {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  max-width: 220px;
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .filter-field-label {
   font-weight: 400;
   color: #101828;
+  white-space: nowrap;
 }
 .filter-operator-label {
   color: #009b71;

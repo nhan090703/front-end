@@ -18,7 +18,9 @@
           v-model="filterValue"
           class="filter-input"
           :type="inputType"
+          :inputmode="inputMode"
           :placeholder="t('common.filterValue')"
+          @blur="formatNumberFilterValue"
         />
         <MsDatePicker
           v-if="field?.typeFilter?.type === 'time'"
@@ -51,6 +53,7 @@ import MsButton from '../ms-button/MsButton.vue'
 import MsSelectBox from '../ms-select-box/MsSelectBox.vue'
 import MsDatePicker from '../ms-date-picker/MsDatePicker.vue'
 import { useI18n } from 'vue-i18n'
+import { formatNumber } from '@/utils/formatter.js'
 
 const { t } = useI18n()
 
@@ -126,9 +129,34 @@ const showValueInput = computed(() => {
  * nptnhan (7/6/2026) hàm tính kiểu input theo kiểu lọc
  */
 const inputType = computed(() => {
-  if (props.field?.typeFilter?.type === 'number') return 'number'
   return 'text'
 })
+
+/**
+ * nptnhan (10/6/2026) hàm tính input mode theo kiểu lọc
+ */
+const inputMode = computed(() => {
+  return props.field?.typeFilter?.type === 'number' ? 'decimal' : 'text'
+})
+
+/**
+ * nptnhan (10/6/2026) hàm parse số filter có dấu phẩy thập phân
+ */
+const parseNumberFilterValue = (value) => {
+  if (value === null || value === undefined || value === '') return null
+  const normalizedValue = String(value).trim().replace(/\./g, '').replace(',', '.')
+  const numberValue = Number(normalizedValue)
+  return Number.isNaN(numberValue) ? null : numberValue
+}
+
+/**
+ * nptnhan (10/6/2026) hàm format input số khi lọc
+ */
+const formatNumberFilterValue = () => {
+  if (props.field?.typeFilter?.type !== 'number') return
+  const numberValue = parseNumberFilterValue(filterValue.value)
+  filterValue.value = numberValue === null ? '' : formatNumber(numberValue)
+}
 
 /**
  * nptnhan (5/6/2026) hàm theo dõi thay đổi dữ liệu
@@ -172,6 +200,7 @@ const hide = () => {
  * nptnhan (5/6/2026) hàm apply filter
  */
 const applyFilter = () => {
+  formatNumberFilterValue()
   emit('apply', {
     field: props.field,
     mode: filterMode.value,
